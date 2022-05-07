@@ -5,4 +5,6 @@
 brownie networks add Development network_name cmd=ganache-cli host=http://127.0.0.1 fork=[URL] accounts=10 mnemonic=brownie port=8545
 ```
 - I used ALCHEMY API to fork. You can register and get your API for free. 
-- brownie run scripts/deploy_sc --network network_name
+- brownie run ```sh
+  scripts/deploy_sc --network network_name
+  ```
