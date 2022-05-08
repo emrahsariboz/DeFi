@@ -8,6 +8,8 @@ contract Test {
         0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
     address private constant WETH = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
 
+    address private constant UNISWAP_V2_FACTORY =
+        0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f;
     event Log(string message, uint256 val);
 
     function swap(
@@ -67,5 +69,29 @@ contract Test {
         emit Log("amountA", amountA);
         emit Log("amountB", amountB);
         emit Log("liquidity", liquidity);
+    }
+
+    function removeLiquidity(address _tokenA, address _tokenB) external {
+        address pair = IUniswapV2Factory(UNISWAP_V2_FACTORY).getPair(
+            _tokenA,
+            _tokenB
+        );
+
+        uint256 liquidity = IERC20(pair).balanceOf(address(this));
+        IERC20(pair).approve(UNISWAP_V2_ROUTER, liquidity);
+
+        (uint256 amountA, uint256 amountB) = IUniswapV2Router(UNISWAP_V2_ROUTER)
+            .removeLiquidity(
+                _tokenA,
+                _tokenB,
+                liquidity,
+                1,
+                1,
+                address(this),
+                block.timestamp
+            );
+
+        emit Log("amountA", amountA);
+        emit Log("amountB", amountB);
     }
 }

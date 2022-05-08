@@ -53,3 +53,12 @@ def deploy():
 
     for i in tx.events["Log"]:
         print(i)
+
+    print("=== Removing Liquidity ===")
+
+    tx = contract.removeLiquidity(DAI, WETH, {"from": accounts[0]})
+
+    tx.wait(1)
+
+    for i in tx.events["Log"]:
+        print(i)
