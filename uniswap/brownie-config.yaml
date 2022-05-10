@@ -1,0 +1,15 @@
+
+dependencies:
+  - OpenZeppelin/openzeppelin-contracts@4.5.0
+
+
+addresses:
+  USDC: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+  USDC_WHALE: "0xCFFAd3200574698b78f32232aa9D63eABD290703"
+  USDC_DECIMAL: 6
+
+
+compiler:
+  solc:
+    remappings:
+      - '@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.5.0'

@@ -31,19 +31,19 @@ def deploy():
     tokenA = interface.IERC20(DAI)
     tokenB = interface.IERC20(WETH)
     print("===Transferring the tokenA and tokenB amounts from whales to account[0]===")
-    tokenA.transfer(accounts[0], Web3.toWei(2600, "ether"), {"from": DAI_WHALE})
+    tokenA.transfer(accounts[0], Web3.toWei(2400, "ether"), {"from": DAI_WHALE})
     tokenB.transfer(accounts[0], Web3.toWei(1, "ether"), {"from": WETH_WHALE})
 
     contract = Test.deploy({"from": accounts[0]})
 
-    tokenA.approve(contract.address, Web3.toWei(2600, "ether"), {"from": accounts[0]})
+    tokenA.approve(contract.address, Web3.toWei(2400, "ether"), {"from": accounts[0]})
     tokenB.approve(contract.address, Web3.toWei(1, "ether"), {"from": accounts[0]})
 
     print("Adding liquidity...")
     tx = contract.addLiquidity(
         DAI,
         WETH,
-        Web3.toWei(2600, "ether"),
+        Web3.toWei(2400, "ether"),
         Web3.toWei(1, "ether"),
         {"from": accounts[0]},
     )
