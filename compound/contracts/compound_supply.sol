@@ -13,6 +13,7 @@ contract TestCompound {
     CErc20 public cToken;
 
     event Allowence2(uint256);
+    event LogAccountLiquidity(uint256);
 
     constructor(address _token, address _cToken) {
         token = IERC20(_token);
@@ -91,6 +92,8 @@ contract TestCompound {
         // Check liquidity
         (uint256 error, uint256 _liquidity, uint256 shortfall) = comptroller
             .getAccountLiquidity(address(this));
+
+        emit LogAccountLiquidity(_liquidity);
 
         require(error == 0, "error");
         require(shortfall == 0, "shortfall >0 ");

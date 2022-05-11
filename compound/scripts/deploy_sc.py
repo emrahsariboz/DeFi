@@ -1,5 +1,6 @@
-from brownie import accounts, network, TestCompound, interface
+from brownie import accounts, network, TestCompound, interface, chain
 from web3 import Web3
+import web3
 import time
 
 SUPPLY_AMOUNT = Web3.toWei(1000, "ether")
@@ -36,11 +37,6 @@ def deploy():
     token_to_borrow = "0x0D8775F648430679A709E98d2b0Cb6250d2887EF"
     c_token_to_borrow = "0x6C8c6b02E7b2BE14d4fA6022Dfd6d75921D90E4E"
     bat_whale = "0x12274c71304bC0E6B38a56b94D2949B118feb838"
-
-    # cWBTC
-    # cWBTC = "0xC11b1268C1A384e55C48c2391d8d480264A3A7F4"
-    # wbtc = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599"
-    # wbtc
 
     contract = TestCompound.deploy(
         DAI,
@@ -109,9 +105,28 @@ def deploy():
     print("Price of BAT token", contract.getPriceFeed(c_token_to_borrow))
     print("Getting colleteral factor..")
     print(contract.getCollateralFactor())
-    print(contract.getAccountLiquidity.call())
+    print(
+        "The account liquidity is ",
+        contract.getAccountLiquidity.call(),
+    )
     tx = contract.borrow(c_token_to_borrow, 18, {"from": whale})
+
+    print(
+        "The account liquidity (after entering market)",
+        tx.events["LogAccountLiquidity"],
+    )
+
     tx.wait(1)
+
+    w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545"))
+
+    print("Current block is ", w3.eth.get_block("latest")["number"])
+    chain.mine(100)
+    print("Current block after the mine is ", w3.eth.get_block("latest")["number"])
+    print(
+        "The account liquidity is (after 100 block) ",
+        contract.getAccountLiquidity.call(),
+    )
 
     print("Checking the BAT amount of contract...")
     bat_balance = interface.CErc20(token_to_borrow).balanceOf(contract.address)
